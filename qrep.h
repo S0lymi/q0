@@ -10,6 +10,7 @@ using namespace std;
 
 class Entbit;
 class Entanglement2;
+class Entanglement;
 class Qbit2
 {
 public:
@@ -30,9 +31,10 @@ class Entbit
 public:
 	Entanglement2* ent;
 	Vector2cd* ampls;
+	Qbit2 * qbit;
 
 	//konst
-	Entbit(Entanglement2* entk = NULL, Vector2cd* amplsk = NULL);
+	Entbit(Entanglement2* entk = NULL, Vector2cd* amplsk = NULL, Qbit2 * qbitk = NULL);
 	//dest
 	~Entbit();
 	//mas
@@ -52,4 +54,15 @@ public:
 	~Entanglement2();
 	//mas
 	void print();
+};
+class Entanglement
+{
+	VectorXi* states;
+	Vector2cd* ampls;
+	Entbit* bits;
+	//konst
+	Entanglement(VectorXi* statesk = NULL, Vector2cd*amplsk = NULL, Entbit* bitsk = NULL);
+	//dest
+	~Entanglement();
+
 };

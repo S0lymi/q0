@@ -17,3 +17,34 @@ public:
 	bool generate(Qbit2** bit1, Qbit2** bit2, Entanglement2** ent);
 
 };
+class BellMeasure
+{
+public:
+	Matrix4cd * projectors;
+	Vector4cd * measuremap;
+	bool *measuretmap;
+
+	//konst
+	BellMeasure();
+	//dest
+	~BellMeasure();
+	//fgv
+
+	int measure(Qbit2* bit1, Qbit2* bit2);
+
+
+};
+class Purification2
+{
+public:
+	int buffer;
+	double newfid;
+	Entanglement2 ** entbuff;
+
+	//const
+	Purification2(int bufferk=2,double newfidk=1);
+	//dest
+	~Purification2();
+	//other
+	Entanglement2* pupdate(Entanglement2** entin);
+};
