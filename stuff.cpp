@@ -267,7 +267,7 @@ int BellMeasure::measure(Qbit2 * bit1, Qbit2 * bit2)
 
 Purification2::Purification2(int bufferk, double newfidk)
 {
-	buffer = bufferk;
+	buffer = bufferk - 1;
 	newfid = newfidk;
 	entbuff = new Entanglement2 *[buffer];
 	for (int i = 0; i < buffer; i++) entbuff[i] = NULL;
@@ -289,22 +289,97 @@ Entanglement2 * Purification2::pupdate(Entanglement2 ** entin)
 			return nullptr;
 		}
 	}
+	//getting new fidelty value
+	double nfid=0;
+
 	//buffer full-> purification
 	*(*entin)->bits[0]->ampls = (*(*entin)->bits[0]->ampls / sqrt((*entin)->bits[0]->ampls->cwiseAbs2().sum()))*sqrt(newfid); //norming to newfid;
 	*(*entin)->bits[1]->ampls = (*(*entin)->bits[1]->ampls / sqrt((*entin)->bits[1]->ampls->cwiseAbs2().sum()))*sqrt(newfid); //norming to newfid;
 	*(*entin)->bits[0]->qbit->ind = (*(*entin)->bits[0]->qbit->ind / sqrt((*entin)->bits[0]->qbit->ind->cwiseAbs2().sum()))*sqrt(1 - newfid); // norming ind part
 	*(*entin)->bits[1]->qbit->ind = (*(*entin)->bits[1]->qbit->ind / sqrt((*entin)->bits[1]->qbit->ind->cwiseAbs2().sum()))*sqrt(1 - newfid); // norming ind part
-	//delete others - TODO
+	//delete others
+	for (int i = 0; i < buffer; i++)
+		if (entbuff[i] != NULL)
+		{
+			delete (entbuff[i])->bits[0]->qbit;
+			delete (entbuff[i])->bits[1]->qbit;
+			delete (entbuff[i])->bits[0];
+			delete (entbuff[i])->bits[1];
+			delete entbuff[i];
+		}
+	//empty buffer
+	for (int i = 0; i < buffer; i++) entbuff[i] = NULL;
+
+	return *entin;
+}
+
+Entanglement2 * Purification2::pupdate2(Entanglement2 ** entin)
+{
 	for (int i = 0; i < buffer; i++)
 	{
-		delete (entbuff[i])->bits[0]->qbit;
-		delete (entbuff[i])->bits[1]->qbit;
-		delete (entbuff[i])->bits[0];
-		delete (entbuff[i])->bits[1];
-		delete entbuff[i];
+		if (entbuff[i] == NULL)
+		{
+			entbuff[i] = *entin;
+			return nullptr;
+		}
+	}
+	double avgfid = 0;
+	for (int i = 0; i < buffer; i++)
+	{
+		if (entbuff[i] != NULL)
+		{
+			if (entbuff[i]->bits[0]->ampls->cwiseAbs2().sum() > avgfid) avgfid = entbuff[i]->bits[0]->ampls->cwiseAbs2().sum();
+		}
+	}
+	if ((*entin)->bits[0]->ampls->cwiseAbs2().sum() > avgfid) avgfid = (*entin)->bits[0]->ampls->cwiseAbs2().sum();
+	newfid = (avgfid*avgfid + (1.0 / 9.0)*((1.0 - avgfid)*(1.0 - avgfid))) / (avgfid*avgfid + (2.0 / 3.0)*(avgfid*(1.0 - avgfid)) + (5.0 / 9.0)*((1.0 - avgfid)*(1.0 - avgfid)));
+
+	//buffer full-> purification
+	*(*entin)->bits[0]->ampls = (*(*entin)->bits[0]->ampls / sqrt((*entin)->bits[0]->ampls->cwiseAbs2().sum()))*sqrt(newfid); //norming to newfid;
+	*(*entin)->bits[1]->ampls = (*(*entin)->bits[1]->ampls / sqrt((*entin)->bits[1]->ampls->cwiseAbs2().sum()))*sqrt(newfid); //norming to newfid;
+	*(*entin)->bits[0]->qbit->ind = (*(*entin)->bits[0]->qbit->ind / sqrt((*entin)->bits[0]->qbit->ind->cwiseAbs2().sum()))*sqrt(1 - newfid); // norming ind part
+	*(*entin)->bits[1]->qbit->ind = (*(*entin)->bits[1]->qbit->ind / sqrt((*entin)->bits[1]->qbit->ind->cwiseAbs2().sum()))*sqrt(1 - newfid); // norming ind part
+																																			  //delete others
+	for (int i = 0; i < buffer; i++)
+	{
+		if (entbuff[i] != NULL)
+		{
+			delete (entbuff[i])->bits[0]->qbit;
+			delete (entbuff[i])->bits[1]->qbit;
+			delete (entbuff[i])->bits[0];
+			delete (entbuff[i])->bits[1];
+			delete entbuff[i];
+		}
 	}
 	//empty buffer
 	for (int i = 0; i < buffer; i++) entbuff[i] = NULL;
 
 	return *entin;
+}
+
+
+//Channel
+Channel::Channel(double alengthk, double lengthk)
+{
+	alength = alengthk;
+	length = lengthk;
+
+}
+
+Channel::~Channel()
+{
+}
+
+void Channel::through(Qbit2 * bit)
+{
+	if (bit != NULL)
+	{
+		if (bit->ent != NULL)
+		{
+			
+			*bit->ent->ampls = *bit->ent->ampls * sqrt(exp(-length / alength)); //setting to new fidelty
+			*bit->ind = Vector2cd::Random();	   //generating random to simulate noise
+			*bit->ind = sqrt(1 - bit->ent->ampls->cwiseAbs2().sum())*(*bit->ind / sqrt(bit->ind->cwiseAbs2().sum())); // norming
+		}
+	}
 }

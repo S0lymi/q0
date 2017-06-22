@@ -2,13 +2,15 @@
 #include "stuff.h"
 #include <time.h>
 
-
+/*
 int main()
 {
 	double a = 1;
+	cin >> a;
 	while ( a != 5)
 	{
 		srand((unsigned int)time(0));
+		*/
 		/*
 		Matrix2cd m1 = Matrix2cd::Random();
 		cout << endl << m1 << endl;
@@ -296,9 +298,9 @@ int main()
 	*/
 
 
-// teszteset
+// teszteset1
 		
-
+/*
 		Vector2cd v1;
 		v1 << 0.707, 0.707;
 		Matrix2i m1;
@@ -321,10 +323,52 @@ int main()
 			for (int j = 0; j < purif1.buffer; j++ ) { cout << purif1.entbuff[j] << endl; }
 
 		}
-		
-		if (eredmeny != NULL) eredmeny->print();
-		cin >> a;
 
+
+		if (eredmeny != NULL) eredmeny->print();
+
+		Channel ch1(2, 1);
+		eredmeny->bits[0]->qbit->print();
+		cout << endl << "ind2: " << eredmeny->bits[0]->qbit->ind->cwiseAbs2().sum() << " ent: " << eredmeny->bits[0]->ampls->cwiseAbs2().sum() << endl;
+		ch1.through(eredmeny->bits[0]->qbit);
+		eredmeny->bits[0]->qbit->print();
+		cout << endl << "ind2: " << eredmeny->bits[0]->qbit->ind->cwiseAbs2().sum() << " ent: " << eredmeny->bits[0]->ampls->cwiseAbs2().sum() << endl;
+		*/
+
+		//Teszteset2
+		/*
+		Vector2cd v1;
+		v1 << 0.707, 0.707;
+		Matrix2i m1;
+		m1 << 0, 0, 1, 1;
+		EPR2 ep1(1, a, &m1, &v1);
+		BellMeasure bellmeas1;
+		Purification2 purif1(3, 0.9);
+		Channel ch1(1, 2);
+		Entanglement2* entout;
+		while (a != 5)
+		{
+			for (int i = 0; i < 1; i++)
+			{
+				ep1.fid = a;
+				Qbit2* q1, *q2, *q3, *q4;
+				Entanglement2 *ent1, *ent2;
+				ep1.generate(&q1, &q2, &ent1);
+				ep1.generate(&q3, &q4, &ent2);
+				ch1.through(q1); ch1.through(q2); ch1.through(q3); ch1.through(q4);
+				bellmeas1.measure(q2, q3);
+				cout << "fidin: " << q1->ent->ampls->cwiseAbs2().sum() << "  ";
+				entout = purif1.pupdate2(&q1->ent->ent);
+			}
+			if (entout != NULL) 
+			{ 
+				entout->print(); 
+				cout << "fidout: " << entout->bits[0]->ampls->cwiseAbs2().sum();
+			}
+			if (entout == NULL) cout << "done";
+
+			cin >> a;
+		}
 	}
 	return 0;
-}
+}*/

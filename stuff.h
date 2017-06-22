@@ -47,4 +47,21 @@ public:
 	~Purification2();
 	//other
 	Entanglement2* pupdate(Entanglement2** entin);
+	Entanglement2* pupdate2(Entanglement2** entin);
+
+};
+
+class Channel
+{
+public:
+	double alength;
+	double length;
+
+	//const
+	Channel(double alengthk, double lengthk);
+	//dest
+	~Channel();
+
+	//other
+	void through(Qbit2* bit);
 };

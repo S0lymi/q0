@@ -17,9 +17,10 @@ public:
 
 	Vector2cd* ind;
 	Entbit* ent;
+	double age;
 
 	//konst
-	Qbit2(Vector2cd *indk = NULL, Entbit* entk = NULL);
+	Qbit2(Vector2cd *indk = NULL, Entbit* entk = NULL, double agek = 0);
 	//dest
 	~Qbit2();
 	//mas

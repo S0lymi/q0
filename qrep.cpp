@@ -3,7 +3,7 @@
 
 // Qbit
 
-Qbit2::Qbit2(Vector2cd * indk, Entbit * entk)
+Qbit2::Qbit2(Vector2cd * indk, Entbit * entk, double agek)
 {
 	if (indk != NULL)
 	{
@@ -11,6 +11,7 @@ Qbit2::Qbit2(Vector2cd * indk, Entbit * entk)
 		*ind = *indk;
 	}
 	ent = entk;
+	age = agek;
 }
 
 Qbit2::~Qbit2()

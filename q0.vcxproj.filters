@@ -24,6 +24,9 @@
     <ClCompile Include="stuff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="q0_1_example.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qrep.h">

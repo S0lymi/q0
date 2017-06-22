@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="q0_1.cpp" />
+    <ClCompile Include="q0_1_example.cpp" />
     <ClCompile Include="qrep.cpp" />
     <ClCompile Include="stuff.cpp" />
   </ItemGroup>
